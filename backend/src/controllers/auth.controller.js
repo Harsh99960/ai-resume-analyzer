@@ -1,98 +1,107 @@
 import userModel from "../models/user.model.js";
-import bcrypt from "bcryptjs"
-import jwt from "jsonwebtoken"
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import BlacklistToken from "../models/blacklist.model.js";
+
+const isProduction = process.env.NODE_ENV === "production";
+
+const cookieOptions = {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+};
+
 /**
- * @name registerUSerController
- * @description register a new user expect username , email and password in the request
+ * @name registerUserController
+ * @description register a new user expect username, email and password in the request
  * @access PUBLIC
  */
-async function registerUserController(req , res){
-    const {username , email , password} = req.body
+async function registerUserController(req, res) {
+    const { username, email, password } = req.body;
 
-    if(!username || !email || !password){
+    if (!username || !email || !password) {
         return res.status(400).json({
-            message:"Please Provide Full Credentials"
-        })
+            message: "Please Provide Full Credentials",
+        });
     }
 
     const isUserAlreadyExists = await userModel.findOne({
-        $or:[{username} , {email}]
-    })
+        $or: [{ username }, { email }],
+    });
 
-    if(isUserAlreadyExists){
+    if (isUserAlreadyExists) {
         return res.status(400).json({
-            message:"Account already exists with this particular Username OR Email"
-        })
+            message:
+                "Account already exists with this particular Username OR Email",
+        });
     }
 
-
-    const hash = await bcrypt.hash(password , 10)
+    const hash = await bcrypt.hash(password, 10);
 
     const user = await userModel.create({
         username,
         email,
-        password: hash
+        password: hash,
     });
 
     const token = jwt.sign(
-        {id:user._id , username:user.username},
+        { id: user._id, username: user.username },
         process.env.JWT_SECRET,
-        {expiresIn:"1d"}
-    )
+        { expiresIn: "1d" }
+    );
 
-    res.cookie("token", token)
+    res.cookie("token", token, cookieOptions);
 
     res.status(201).json({
-        message:"User Registered Successfully",
-        user:{
-            id:user._id,
-            username:user.username,
-            email:user.email
-        }
-    })
+        message: "User Registered Successfully",
+        user: {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+        },
+    });
 }
 
 /**
  * @name loginUserController
- * @description login a user , expects email and password in the request body 
+ * @description login a user, expects email and password in the request body
  * @access public
  */
-async function loginUserController(req , res){
+async function loginUserController(req, res) {
+    const { email, password } = req.body;
 
-    const {email , password} = req.body
+    const user = await userModel.findOne({ email });
 
-    const user = await userModel.findOne({email})
-
-    if(!user){
+    if (!user) {
         return res.status(400).json({
-            message:"Invalid email or password"
-        })
+            message: "Invalid email or password",
+        });
     }
 
-    const isPasswordValid = await bcrypt.compare(password , user.password)
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if(!isPasswordValid){
+    if (!isPasswordValid) {
         return res.status(400).json({
-            message:"Invaild Email Or Password"
-        })
+            message: "Invalid Email Or Password",
+        });
     }
 
     const token = jwt.sign(
-        {id:user._id , username:user.username},
+        { id: user._id, username: user.username },
         process.env.JWT_SECRET,
-        {expiresIn:"1d"}
-    )
+        { expiresIn: "1d" }
+    );
 
-    res.cookie("token" , token)
+    res.cookie("token", token, cookieOptions);
+
     res.status(200).json({
-        message:"User Logged In Successfully!",
-        user:{
-            id:user._id,
-            username:user.username,
-            email:user.email
-        }
-    })
+        message: "User Logged In Successfully!",
+        user: {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+        },
+    });
 }
 
 /**
@@ -100,21 +109,20 @@ async function loginUserController(req , res){
  * @description clear token from user cookie and add the token in blacklist
  * @access public
  */
-async function logoutUserController(req , res){
-    const token = req.cookies.token
-    
-    if(token){
-        await BlacklistToken.create({
-            token
-        })
+async function logoutUserController(req, res) {
+    const token = req.cookies.token;
 
-        res.clearCookie("token")
-        res.status(200).json({
-            message:"User logged out successfully"
-        })
+    if (token) {
+        await BlacklistToken.create({
+            token,
+        });
     }
 
-    
+    res.clearCookie("token", cookieOptions);
+
+    return res.status(200).json({
+        message: "User logged out successfully",
+    });
 }
 
 /**
@@ -122,19 +130,22 @@ async function logoutUserController(req , res){
  * @description get the current logged in user details
  * @access private
  */
-async function getMeController(req , res){
-
-    const user = await userModel.findById(req.user.id)
+async function getMeController(req, res) {
+    const user = await userModel.findById(req.user.id);
 
     res.status(200).json({
-        message:"user details fetched successfully",
-        user:{
+        message: "user details fetched successfully",
+        user: {
             id: user._id,
             username: user.username,
-            email: user.email
-        }
-    })
+            email: user.email,
+        },
+    });
 }
 
-
-export default {registerUserController , loginUserController , logoutUserController , getMeController}
+export default {
+    registerUserController,
+    loginUserController,
+    logoutUserController,
+    getMeController,
+};
