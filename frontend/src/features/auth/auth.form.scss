@@ -1,0 +1,297 @@
+.auth-form {
+  min-height: 100vh;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  background-color: #080808;
+  color: #ffffff;
+
+  animation: pageFadeIn 0.5s ease forwards;
+
+  .auth-card {
+    width: 100%;
+    max-width: 420px;
+
+    padding: 42px;
+
+    background-color: #111111;
+
+    border: 1px solid #252525;
+    border-radius: 18px;
+
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+
+    animation: cardSlideUp 0.6s ease forwards;
+
+    transition:
+      border-color 0.25s ease,
+      transform 0.25s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 77, 141, 0.35);
+    }
+  }
+
+  .auth-header {
+    text-align: center;
+    margin-bottom: 32px;
+
+    h1 {
+      margin: 0 0 10px;
+
+      color: #ffffff;
+
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+
+      animation: headingFadeIn 0.6s ease forwards;
+    }
+
+    p {
+      margin: 0;
+
+      color: #8f8f8f;
+      font-size: 14px;
+
+      animation: headingFadeIn 0.7s ease forwards;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    animation: inputFadeIn 0.5s ease both;
+
+    &:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 0.18s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.26s;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 0.34s;
+    }
+
+    label {
+      color: #d6d6d6;
+
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+
+      padding: 13px 15px;
+
+      border: 1px solid #303030;
+      border-radius: 9px;
+
+      outline: none;
+
+      background-color: #0b0b0b;
+      color: #ffffff;
+
+      font-size: 15px;
+
+      transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background-color 0.25s ease;
+
+      &::placeholder {
+        color: #606060;
+      }
+
+      &:hover {
+        border-color: #444444;
+      }
+
+      &:focus {
+        border-color: #ff4d8d;
+
+        background-color: #0e0e0e;
+
+        box-shadow: 0 0 0 3px rgba(255, 77, 141, 0.1);
+      }
+    }
+  }
+
+  button {
+    margin-top: 8px;
+
+    width: 100%;
+
+    padding: 13px 16px;
+
+    border: none;
+    border-radius: 9px;
+
+    background-color: #ff4d8d;
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+      background-color 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+
+    animation: buttonFadeIn 0.6s ease 0.35s both;
+
+    &:hover {
+      background-color: #ff3b82;
+
+      transform: translateY(-2px);
+
+      box-shadow: 0 8px 20px rgba(255, 77, 141, 0.2);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+/* =========================
+   Animations
+========================= */
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes headingFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes inputFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes buttonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 500px) {
+  .auth-form {
+    padding: 20px;
+
+    .auth-card {
+      padding: 30px 22px;
+      border-radius: 16px;
+    }
+
+    .auth-header {
+      h1 {
+        font-size: 28px;
+      }
+    }
+  }
+}
+
+/* =========================
+   Auth Switch
+========================= */
+
+.auth-switch {
+  margin-top: 16px;
+
+  text-align: center;
+
+  font-size: 16px;
+
+  color: #8f8f8f;
+
+  span {
+    margin-left: 4px;
+
+    color: #ff4d8d;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+      color 0.2s ease,
+      text-shadow 0.2s ease;
+
+    &:hover {
+      color: #ff79aa;
+
+      text-decoration: underline;
+
+      text-shadow: 0 0 10px rgba(255, 77, 141, 0.25);
+    }
+  }
+}
