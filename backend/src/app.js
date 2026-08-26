@@ -6,15 +6,27 @@ import interviewRouter from "./routes/interview.routes.js";
 
 const app = express();
 
-app.use(express.json());
-app.use(cookieParser());
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://ai-resume-analyzer-alpha-lovat.vercel.app",
+    process.env.FRONTEND_URL,
+].filter(Boolean);
 
 app.use(
     cors({
-        origin: process.env.FRONTEND_URL,
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+
+            return callback(new Error("Not allowed by CORS"));
+        },
         credentials: true,
     })
 );
+
+app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/auth", authRouter);
 app.use("/api/interview", interviewRouter);
