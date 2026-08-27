@@ -102,14 +102,8 @@ Analyze all three carefully and generate the interview report according to the p
 async function generatePdfFromHtml(htmlContent) {
     console.log("Starting Puppeteer PDF generation...");
 
-    console.log(
-        "Puppeteer executable path:",
-        await puppeteer.executablePath()
-    );
-
     const browser = await puppeteer.launch({
         headless: true,
-        executablePath: await puppeteer.executablePath(),
         args: [
             "--no-sandbox",
             "--disable-setuid-sandbox",
