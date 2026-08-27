@@ -13,10 +13,9 @@ app.use((req, res, next) => {
     next();
 });
 app.get("/", (req, res) => {
-    res.json({
-        message: "AI Resume Analyzer Backend is running",
-        version: "36934e0",
-    });
+    console.log("🔥🔥🔥 ROOT ROUTE HIT 🔥🔥🔥");
+
+    return res.status(200).send("ROOT ROUTE IS WORKING");
 });
 
 const allowedOrigins = [
@@ -45,9 +44,9 @@ app.use("/api/auth", authRouter);
 app.use("/api/interview", interviewRouter);
 
 app.get("/api/test", (req, res) => {
-    res.json({
-        message: "API route is working",
-    });
+    console.log("🔥🔥🔥 API TEST ROUTE HIT 🔥🔥🔥");
+
+    return res.status(200).send("API TEST IS WORKING");
 });
 
 export default app;
