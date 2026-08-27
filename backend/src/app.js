@@ -6,6 +6,12 @@ import interviewRouter from "./routes/interview.routes.js";
 
 const app = express();
 
+console.log("🔥 AI RESUME ANALYZER APP LOADED - c803c19");
+
+app.use((req, res, next) => {
+    console.log("🔥 REQUEST:", req.method, req.url);
+    next();
+});
 app.get("/", (req, res) => {
     res.json({
         message: "AI Resume Analyzer Backend is running",
