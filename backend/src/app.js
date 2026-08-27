@@ -6,16 +6,11 @@ import interviewRouter from "./routes/interview.routes.js";
 
 const app = express();
 
-console.log("🔥 AI RESUME ANALYZER APP LOADED - c803c19");
-
-app.use((req, res, next) => {
-    console.log("🔥 REQUEST:", req.method, req.url);
-    next();
-});
 app.get("/", (req, res) => {
-    console.log("🔥🔥🔥 ROOT ROUTE HIT 🔥🔥🔥");
-
-    return res.status(200).send("ROOT ROUTE IS WORKING");
+    res.json({
+        message: "AI Resume Analyzer Backend is running",
+        version: "36934e0",
+    });
 });
 
 const allowedOrigins = [
@@ -44,9 +39,9 @@ app.use("/api/auth", authRouter);
 app.use("/api/interview", interviewRouter);
 
 app.get("/api/test", (req, res) => {
-    console.log("🔥🔥🔥 API TEST ROUTE HIT 🔥🔥🔥");
-
-    return res.status(200).send("API TEST IS WORKING");
+    res.json({
+        message: "API route is working",
+    });
 });
 
 export default app;
